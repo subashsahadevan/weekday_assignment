@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+body{
+  
+}
+*{
+  font-family: "Lexend", sans-serif !important;
+}
+.card-body{
+  padding: 5px !important;
+  overflow: hidden;
+    max-width: 360px;
+}
+.input{
+  font-size: 13px !important;
+  font-weight: 300;
+}
+.card-body{
+  cursor: pointer !important;
+}
+.hiddenContent {
+  opacity: 0.5; 
+}
