@@ -1,1 +1,2 @@
 # weekday_assignment
+init
