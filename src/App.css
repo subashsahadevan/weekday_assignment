@@ -59,3 +59,12 @@ body {}
   margin-top: 7rem !important;
   padding:1rem;
 }
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.filters > div {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}

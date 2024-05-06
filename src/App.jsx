@@ -6,7 +6,7 @@ import Filters from './components/Filters';
 import { useDispatch, useSelector } from 'react-redux';
 import { addJob } from './store/reducers/jobSlice';
 import Navbar from './components/Navbar';
-
+import SearchOffIcon from '@mui/icons-material/SearchOff';
 function App() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -73,7 +73,7 @@ function App() {
   const jobs = useSelector(state => state.jobs);
 
   const filteredJobs = jobs.jobs.filter(job => {
-    const { search, role, exp, remote=[], salary=[] } = filters.newFilters;
+    const { search, role, exp, remote = [], salary = [] } = filters.newFilters;
     // Convert filter values to numbers using parseInt
     const expValues = exp.map(value => parseInt(value));
     const salaryValues = parseInt(salary)
@@ -103,17 +103,28 @@ function App() {
       <Grid item xs={12} md={10} gap={0} >
         <Navbar />
         <Filters onFilterChange={onFilterChange} />
-        <div ref={containerRef} style={{ padding: '1rem' }} >
-          <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 3, md: 3 }}>
-            {filteredJobs.map(job => (
-              <Grid key={job.id} item xs={12} md={4}>
-                <JobCard job={job} />
-              </Grid>
-            ))}
-          </Grid>
-          {loading && <p>Loading...</p>}
-          {!hasMore && <p>No more data</p>}
-        </div>
+        {filteredJobs.length != 0}{
+          <div ref={containerRef} style={{ padding: '1rem' }} >
+            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 3, md: 3 }}>
+              {filteredJobs.map(job => (
+                <Grid key={job.id} item xs={12} md={4}>
+                  <JobCard job={job} />
+                </Grid>
+              ))}
+            </Grid>
+            {loading && <p>Loading...</p>}
+            {!hasMore && <p>No more data</p>}
+          </div>
+        }
+        {
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div style={{textAlign:'center'}}>
+              <SearchOffIcon /> <br />
+              No Jobs available for this category at the moment
+            </div>
+          </div>
+        }
+
       </Grid>
       <Grid item xs={12} md={1} className='sidebar_right'>
       </Grid>

@@ -112,7 +112,7 @@ function Filters({onFilterChange}) {
     return (
         <Stack direction="row"
             alignItems="center" mb={5} mt={5} className='filters'>
-            <div style={mr}>
+            <div style={mr} >  
                 <Select
                     defaultValue={selectedRole}
                     isMulti
