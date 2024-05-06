@@ -153,7 +153,7 @@ function Filters({onFilterChange}) {
                     onChange={setSelectedRemote}
                 />
             </div>
-            <div style={mr}>
+            {/* <div style={mr}>
                 <Select
                     defaultValue={selectedTech}
                     isMulti
@@ -162,7 +162,7 @@ function Filters({onFilterChange}) {
                     className='input'
                     onChange={setSelectedTech}
                 />
-            </div>
+            </div> */}
             <div style={mr}>
                 <Select
                     defaultValue={selectedSalary}

@@ -116,7 +116,7 @@ function App() {
             {!hasMore && <p>No more data</p>}
           </div>
         }
-        {
+       { filteredJobs.length == 0}{
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <div style={{textAlign:'center'}}>
               <SearchOffIcon /> <br />
