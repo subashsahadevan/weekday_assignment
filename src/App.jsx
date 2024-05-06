@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-import { Container, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import './App.css';
 import JobCard from './components/JobCard';
 import Filters from './components/Filters';
 import { useDispatch, useSelector } from 'react-redux';
 import { addJob } from './store/reducers/jobSlice';
+import Navbar from './components/Navbar';
 
 function App() {
   const dispatch = useDispatch();
@@ -13,10 +14,15 @@ function App() {
   const [limit, setLimit] = useState(10); // Initial limit
   const [offset, setOffset] = useState(0); // Initial offset
   const containerRef = useRef();
+  const [filters, setFilters] = useState({});
 
+  // Function to handle filter changes received from the child component
+  const onFilterChange = (newFilters) => {
+    setFilters({ newFilters });
+  };
   useEffect(() => {
     fetchData();
-  }, [offset]);
+  }, [offset, filters]);
 
   const fetchData = async () => {
     setLoading(true); // Set loading state to true before fetching
@@ -61,26 +67,57 @@ function App() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [loading, hasMore]);
-  
+
 
   // Get jobs from Redux store state
   const jobs = useSelector(state => state.jobs);
 
+  const filteredJobs = jobs.jobs.filter(job => {
+    const { search, role, exp, remote=[], salary=[] } = filters.newFilters;
+    // Convert filter values to numbers using parseInt
+    const expValues = exp.map(value => parseInt(value));
+    const salaryValues = parseInt(salary)
+    // Check if the search query is empty or if the company name includes the search query
+    const searchMatch = search.trim() === '' || job.companyName.toLowerCase().includes(search.toLowerCase());
+
+    // Check if the role filter is empty or if the job's filter matches any of the selected filter
+    const roleMatch = role.length === 0 || role.includes(job.jobRole);
+    const expMatch = exp.length === 0 || expValues.includes(parseInt(job.minExp));
+    const hybridMatch = remote.includes('remote') && !remote.some(value => value !== 'remote') ? job.location === 'remote' : !remote.includes('remote') && remote.some(value => value !== 'remote') ? job.location !== 'remote' : true;
+
+
+
+
+    const payMatch = salary.length === 0 || (parseInt(job.minJdSalary) >= 0 && parseInt(job.minJdSalary) <= salary);
+
+    // Return true if both conditions are met
+    return searchMatch && roleMatch && expMatch && hybridMatch && payMatch;
+  });
+
+
   return (
-    <Container>
-      <Filters />
-      <div ref={containerRef} >
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 3, md: 3 }}>
-          {jobs.jobs.map(job => (
-            <Grid key={job.id} item xs={12} md={4}>
-              <JobCard job={job} />
-            </Grid>
-          ))}
-        </Grid>
-        {loading && <p>Loading...</p>}
-        {!hasMore && <p>No more data</p>}
-      </div>
-    </Container>
+    <Grid container spacing={0}>
+      <Grid item xs={12} md={1} className='sideBar_left'>
+        <img src="https://jobs.weekday.works/_next/static/media/logo-small.08826abd.png" alt="" width={44} />
+      </Grid>
+      <Grid item xs={12} md={10} gap={0} >
+        <Navbar />
+        <Filters onFilterChange={onFilterChange} />
+        <div ref={containerRef} style={{ padding: '1rem' }} >
+          <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 3, md: 3 }}>
+            {filteredJobs.map(job => (
+              <Grid key={job.id} item xs={12} md={4}>
+                <JobCard job={job} />
+              </Grid>
+            ))}
+          </Grid>
+          {loading && <p>Loading...</p>}
+          {!hasMore && <p>No more data</p>}
+        </div>
+      </Grid>
+      <Grid item xs={12} md={1} className='sidebar_right'>
+      </Grid>
+    </Grid>
   );
 }
 

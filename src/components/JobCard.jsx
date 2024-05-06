@@ -106,7 +106,7 @@ return (
                     {job.minExp} Years
                 </Typography>
                 <Button size="small" fullWidth variant="contained" style={custom_btn}><BoltIcon style={color_icon} />Easy Apply</Button>
-                <Button size="small" fullWidth variant="contained" style={custom_btn_unlock}>Unlock refferal asks</Button>
+                {/* <Button size="small" fullWidth variant="contained" style={custom_btn_unlock}>Unlock refferal asks</Button> */}
             </CardContent>
         </Card>
     </Box>
